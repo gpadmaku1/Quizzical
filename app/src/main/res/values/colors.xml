@@ -140,4 +140,9 @@
     <color name="dark_blue">#00008B</color>
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
+
+    <color name="primary">#280aa0</color>
+    <color name="primary_light">#653bd2</color>
+    <color name="primary_dark">#000070</color>
+    <color name="grey">#E0E2E0</color>
 </resources>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quizzical</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_difficulty">Select Difficulty</string>
 </resources>
