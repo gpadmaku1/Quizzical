@@ -31,6 +31,7 @@ class MainActivity : FragmentActivity() {
 
     private fun initialize() {
         val fragment = MenuFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }
