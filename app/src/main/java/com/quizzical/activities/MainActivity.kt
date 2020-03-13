@@ -2,6 +2,7 @@ package com.quizzical.activities
 
 import android.os.Bundle
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import butterknife.BindView

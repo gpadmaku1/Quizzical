@@ -1,17 +1,20 @@
 package com.quizzical.fragments
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.quizzical.R
+import com.quizzical.adapters.MenuAdapter
 import com.quizzical.viewmodels.MenuVm
 
 class MenuFragment : Fragment() {
@@ -23,10 +26,13 @@ class MenuFragment : Fragment() {
     @BindView(R.id.category_rv)
     lateinit var categoryRecyclerView: RecyclerView
 
-    @BindView(R.id.clickButton)
-    lateinit var clickButton: Button
+    @BindView(R.id.progress_circular)
+    lateinit var progressBar: ProgressBar
 
     private val menuVm by lazy { MenuVm.get(this) }
+
+    private var menuLayoutManager = LinearLayoutManager(context)
+    private lateinit var menuAdapter: MenuAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,12 +45,22 @@ class MenuFragment : Fragment() {
         return root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        menuAdapter = MenuAdapter(ViewModelProviders.of(this@MenuFragment))
+    }
+
     private fun setupCategoriesRv() {
-        menuVm.fetchCategories()
+        categoryRecyclerView.apply {
+            layoutManager = menuLayoutManager
+            adapter = menuAdapter
+        }
+        if (menuAdapter.isEmpty()) {
+            menuVm.fetchCategories()
+        }
         menuVm.triviaCategories.observe(this, Observer {
-            it.forEach {
-                Log.d(TAG, "name: ${it.name} + id: ${it.id}")
-            }
+            progressBar.visibility = View.GONE
+            menuAdapter.displayCategories(it)
         })
     }
 }
