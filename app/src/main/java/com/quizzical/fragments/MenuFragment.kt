@@ -1,6 +1,5 @@
 package com.quizzical.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -21,6 +19,8 @@ class MenuFragment : Fragment() {
 
     companion object {
         val TAG: String = MenuFragment::class.java.simpleName
+
+        fun getInstance(): MenuFragment = MenuFragment()
     }
 
     @BindView(R.id.category_rv)
@@ -45,12 +45,8 @@ class MenuFragment : Fragment() {
         return root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        menuAdapter = MenuAdapter(ViewModelProviders.of(this@MenuFragment))
-    }
-
     private fun setupCategoriesRv() {
+        menuAdapter = MenuAdapter()
         categoryRecyclerView.apply {
             layoutManager = menuLayoutManager
             adapter = menuAdapter

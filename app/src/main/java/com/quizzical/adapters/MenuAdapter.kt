@@ -2,13 +2,12 @@ package com.quizzical.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.quizzical.R
 import com.quizzical.models.Category
 import com.quizzical.viewholders.MenuVh
 
-class MenuAdapter(private val dataSet: ViewModelProvider) : RecyclerView.Adapter<MenuVh>() {
+class MenuAdapter : RecyclerView.Adapter<MenuVh>() {
 
     private var triviaCategories = emptyList<Category>()
 
