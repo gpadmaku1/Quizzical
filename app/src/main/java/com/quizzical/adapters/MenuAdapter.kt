@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.quizzical.R
 import com.quizzical.models.Category
 import com.quizzical.viewholders.MenuVh
+import com.quizzical.viewholders.OnCategoryClickListener
 
-class MenuAdapter : RecyclerView.Adapter<MenuVh>() {
+class MenuAdapter(onCategoryClickListener: OnCategoryClickListener) :
+    RecyclerView.Adapter<MenuVh>() {
 
     private var triviaCategories = emptyList<Category>()
+    private var onCategoryListener: OnCategoryClickListener = onCategoryClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuVh {
         val root = LayoutInflater.from(
@@ -17,7 +20,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuVh>() {
         ).inflate(
             R.layout.category_item, parent, false
         )
-        return MenuVh(root)
+        return MenuVh(root, onCategoryListener)
     }
 
     override fun getItemCount(): Int = triviaCategories.size

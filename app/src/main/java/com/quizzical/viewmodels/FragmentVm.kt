@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.quizzical.activities.MainActivity
-import com.quizzical.enums.FragmentTypes
+import com.quizzical.models.FragmentData
 
 class FragmentVm : ViewModel() {
 
@@ -15,6 +15,6 @@ class FragmentVm : ViewModel() {
             ViewModelProviders.of(activity).get(FragmentVm::class.java)
     }
 
-    val currentFragment = MutableLiveData<FragmentTypes>()
+    val currentFragment = MutableLiveData<FragmentData>()
 
 }
