@@ -2,4 +2,8 @@
     <string name="app_name">Quizzical</string>
     <string name="select_category">Select Category</string>
     <string name="select_difficulty">Select Difficulty</string>
+    <string name="question_number">Question %1$d</string>
+    <string name="sample_question_text">What ingredient is NOT used to craft a cake in Minecraft?</string>
+
+    <string name="current_question_key">current_question_key</string>
 </resources>

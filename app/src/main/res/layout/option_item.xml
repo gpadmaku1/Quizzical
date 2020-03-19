@@ -9,12 +9,12 @@
     app:cardCornerRadius="@dimen/margin_4">
 
     <TextView
-        android:id="@+id/category_name"
+        android:id="@+id/option_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/raleway"
         android:padding="@dimen/margin_16"
         android:textSize="@dimen/text_16"
-        tools:text="Entertainment: Musical Theatres" />
+        tools:text="Amsterdam, Netherlands" />
 
 </androidx.cardview.widget.CardView>

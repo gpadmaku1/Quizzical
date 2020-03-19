@@ -14,34 +14,38 @@
         android:layout_marginEnd="@dimen/margin_16"
         android:fontFamily="@font/raleway"
         android:gravity="center"
-        android:text="@string/select_category"
+        android:text="@string/question_number"
         android:textColor="@color/black"
         android:textSize="@dimen/text_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:fontFamily="@font/raleway"
+        android:gravity="center"
+        android:textSize="@dimen/text_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="@string/sample_question_text" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/category_rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/margin_16"
+    <LinearLayout
+        android:id="@+id/multiple_choice_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_16"
-        android:layout_marginRight="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_16"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        tools:listitem="@layout/category_item" />
-
+        android:layout_marginEnd="@dimen/margin_16"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

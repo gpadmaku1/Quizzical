@@ -3,6 +3,7 @@ package com.quizzical.activities
 import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -11,8 +12,10 @@ import butterknife.ButterKnife
 import com.quizzical.R
 import com.quizzical.enums.FragmentTypes
 import com.quizzical.fragments.DifficultyFragment
-import com.quizzical.fragments.MenuFragment
+import com.quizzical.fragments.QuestionFragment
+import com.quizzical.models.Question
 import com.quizzical.viewmodels.FragmentVm
+import com.quizzical.viewmodels.QuestionsVm
 
 class MainActivity : FragmentActivity() {
 
@@ -27,6 +30,9 @@ class MainActivity : FragmentActivity() {
     lateinit var toolbar: Toolbar
 
     private val fragmentVm: FragmentVm by lazy { FragmentVm.get(this) }
+    private val questionsVm: QuestionsVm by lazy { QuestionsVm.get(this) }
+
+    private lateinit var questions: List<Question>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,21 +46,53 @@ class MainActivity : FragmentActivity() {
     private fun setupFragmentVm() {
         fragmentVm.currentFragment.observe(this, Observer { fragmentData ->
             Log.d(TAG, fragmentData.fragmentTypes.name)
-            replaceCurrentFragment(fragmentData.fragmentTypes)
+            replaceCurrentFragment(fragmentData.fragmentTypes, fragmentData.bundle)
         })
     }
 
-    private fun replaceCurrentFragment(fragmentType: FragmentTypes) {
+    private fun replaceCurrentFragment(
+        fragmentType: FragmentTypes,
+        bundle: Bundle
+    ) {
         val fragment = when (fragmentType) {
-            FragmentTypes.MenuFragment -> MenuFragment.getInstance()
-            FragmentTypes.DifficultyFragment -> DifficultyFragment.getInstance()
+            FragmentTypes.DifficultyFragment -> {
+                DifficultyFragment()
+            }
+            FragmentTypes.QuestionFragment -> {
+                if (!bundle.isEmpty) {
+                    val currentQuestionIndex =
+                        bundle.getInt(getString(R.string.current_question_key))
+                    QuestionFragment().apply {
+                        if (currentQuestionIndex < questions.size) {
+                            val packageData = Bundle()
+                            packageData.putInt(
+                                getString(R.string.current_question_key),
+                                currentQuestionIndex + 1
+                            )
+                            arguments = packageData
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Error. Something went wrong.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } else {
+                    QuestionFragment().apply {
+                        val packageData = Bundle()
+                        packageData.putInt(activity?.getString(R.string.current_question_key), 0)
+                        arguments = packageData
+                    }
+                }
+            }
         }
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
             .commit()
     }
 
     private fun initializeMenuFragment() {
-        val fragment = MenuFragment()
+        val fragment = DifficultyFragment()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
             .commit()
     }
