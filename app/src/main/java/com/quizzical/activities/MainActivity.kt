@@ -61,33 +61,36 @@ class MainActivity : FragmentActivity() {
             FragmentTypes.QuestionFragment -> {
                 if (!bundle.isEmpty) {
                     val currentQuestionIndex =
-                        bundle.getInt(getString(R.string.current_question_key))
+                        bundle.getInt("current_question_index")
                     QuestionFragment().apply {
-                        if (currentQuestionIndex < questions.size) {
-                            val packageData = Bundle()
-                            packageData.putInt(
-                                getString(R.string.current_question_key),
-                                currentQuestionIndex + 1
-                            )
-                            arguments = packageData
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Error. Something went wrong.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        questionsVm.triviaQuestions.value?.size?.let {
+                            if (currentQuestionIndex < it) {
+                                val packageData = Bundle()
+                                packageData.putInt(
+                                    "current_question_index",
+                                    currentQuestionIndex
+                                )
+                                arguments = packageData
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Error. Something went wrong.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 } else {
                     QuestionFragment().apply {
                         val packageData = Bundle()
-                        packageData.putInt(activity?.getString(R.string.current_question_key), 0)
+                        packageData.putInt("current_question_index", 0)
                         arguments = packageData
                     }
                 }
             }
         }
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 

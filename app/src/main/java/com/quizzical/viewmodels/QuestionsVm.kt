@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import com.quizzical.activities.MainActivity
-import com.quizzical.fragments.DifficultyFragment
 import com.quizzical.models.Question
 import com.quizzical.models.TriviaQuestions
 import com.quizzical.utils.NetworkUtils
@@ -33,9 +32,8 @@ class QuestionsVm : ViewModel() {
     }
 
     fun fetchQuestions(difficultyLevel: String) {
-        questionsUrl += difficultyLevel
         viewModelScope.launch(Dispatchers.IO) {
-            val stringResponse = NetworkUtils.getRequest(questionsUrl)
+            val stringResponse = NetworkUtils.getRequest(questionsUrl + difficultyLevel)
             if (stringResponse != null) {
                 val jsonAdapter: JsonAdapter<TriviaQuestions> =
                     moshi.adapter(TriviaQuestions::class.java)

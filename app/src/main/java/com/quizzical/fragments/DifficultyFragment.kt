@@ -61,9 +61,9 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
     }
 
     private fun setupFragmentVm() {
-        fragmentVm = activity?.run {
-            ViewModelProviders.of(this)[FragmentVm::class.java]
-        } ?: throw Exception("Invalid Activity")
+        activity?.let {
+            fragmentVm = ViewModelProviders.of(it).get(FragmentVm::class.java)
+        }
     }
 
     override fun onDifficultySelected(position: Int) {
