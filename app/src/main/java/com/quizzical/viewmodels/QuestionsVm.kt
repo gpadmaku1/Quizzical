@@ -18,7 +18,7 @@ class QuestionsVm : ViewModel() {
     companion object {
         val TAG: String = QuestionsVm::class.java.simpleName
         var questionsUrl =
-            "https://opentdb.com/api.php?amount=50&type=multiple&difficulty="
+            "https://opentdb.com/api.php?amount=50&type=multiple&encode=base64&difficulty="
 
         fun get(activity: MainActivity) =
             ViewModelProviders.of(activity).get(QuestionsVm::class.java)
@@ -26,10 +26,6 @@ class QuestionsVm : ViewModel() {
 
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     val triviaQuestions = MutableLiveData<List<Question>>()
-
-    fun getTriviaQuestions(): List<Question>? {
-        return triviaQuestions.value
-    }
 
     fun fetchQuestions(difficultyLevel: String) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -3,6 +3,7 @@ package com.quizzical.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +20,8 @@ import com.quizzical.models.Question
 import com.quizzical.viewmodels.FragmentVm
 import com.quizzical.viewmodels.QuestionsVm
 
-class QuestionFragment : Fragment() {
 
-    companion object {
-        val TAG: String = QuestionFragment::class.java.simpleName
-    }
+class QuestionFragment : Fragment() {
 
     @BindView(R.id.title)
     lateinit var title: TextView
@@ -71,9 +69,9 @@ class QuestionFragment : Fragment() {
             title.text = String.format(getString(R.string.question_number), questionIndex + 1)
             question = it
             question.let {
-                questionTv.text = question.question
-                val correctAnswer = question.correct_answer
-                val incorrectAnswers = question.incorrect_answers
+                questionTv.text = decodeBase64(question.question)
+                val correctAnswer = decodeBase64(question.correct_answer)
+                val incorrectAnswers = decodeBase64List(question.incorrect_answers)
                 val options: ArrayList<String> = ArrayList()
                 options.add(correctAnswer)
                 options.addAll(incorrectAnswers)
@@ -81,6 +79,21 @@ class QuestionFragment : Fragment() {
                 createOptionsList(options, correctAnswer, questionIndex)
             }
         }
+    }
+
+    private fun decodeBase64List(list: List<String>): Collection<String> {
+        val collection = ArrayList<String>()
+        for (i in list.indices) {
+            decodeBase64(list[i])?.let {
+                collection.add(it)
+            }
+        }
+        return collection
+    }
+
+    private fun decodeBase64(coded: String): String {
+        val data: ByteArray = Base64.decode(coded, Base64.DEFAULT)
+        return String(data)
     }
 
     private fun createOptionsList(
