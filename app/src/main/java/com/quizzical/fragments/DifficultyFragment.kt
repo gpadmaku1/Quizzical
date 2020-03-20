@@ -71,8 +71,9 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
         questionsVm.fetchQuestions(difficultyLevel)
         questionsVm.triviaQuestions.observe(this, Observer {
             if (it.isNotEmpty()) {
+                val bundle = Bundle()
                 fragmentVm.currentFragment.value =
-                    FragmentData(FragmentTypes.QuestionFragment)
+                    FragmentData(FragmentTypes.QuestionFragment, bundle, false)
             } else {
                 Toast.makeText(
                     context,

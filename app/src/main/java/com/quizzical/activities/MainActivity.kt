@@ -3,7 +3,6 @@ package com.quizzical.activities
 import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -12,7 +11,10 @@ import butterknife.ButterKnife
 import com.quizzical.R
 import com.quizzical.enums.FragmentTypes
 import com.quizzical.fragments.DifficultyFragment
+import com.quizzical.fragments.LoseFragment
 import com.quizzical.fragments.QuestionFragment
+import com.quizzical.fragments.WinFragment
+import com.quizzical.models.FragmentData
 import com.quizzical.models.Question
 import com.quizzical.viewmodels.FragmentVm
 import com.quizzical.viewmodels.QuestionsVm
@@ -46,13 +48,18 @@ class MainActivity : FragmentActivity() {
     private fun setupFragmentVm() {
         fragmentVm.currentFragment.observe(this, Observer { fragmentData ->
             Log.d(TAG, fragmentData.fragmentTypes.name)
-            replaceCurrentFragment(fragmentData.fragmentTypes, fragmentData.bundle)
+            replaceCurrentFragment(
+                fragmentData.fragmentTypes,
+                fragmentData.bundle,
+                fragmentData.addToBackStack
+            )
         })
     }
 
     private fun replaceCurrentFragment(
         fragmentType: FragmentTypes,
-        bundle: Bundle
+        bundle: Bundle,
+        addToBackStack: Boolean
     ) {
         val fragment = when (fragmentType) {
             FragmentTypes.DifficultyFragment -> {
@@ -72,11 +79,8 @@ class MainActivity : FragmentActivity() {
                                 )
                                 arguments = packageData
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    "Error. Something went wrong.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                fragmentVm.currentFragment.value =
+                                    FragmentData(FragmentTypes.WinFragment)
                             }
                         }
                     }
@@ -88,15 +92,27 @@ class MainActivity : FragmentActivity() {
                     }
                 }
             }
+            FragmentTypes.LoseFragment -> {
+                LoseFragment()
+            }
+            FragmentTypes.WinFragment -> {
+                WinFragment()
+            }
         }
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).apply {
+            if (addToBackStack) {
+                addToBackStack(null)
+            }
+        }.also {
+            it.commit()
+        }
     }
 
     private fun initializeMenuFragment() {
         val fragment = DifficultyFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }

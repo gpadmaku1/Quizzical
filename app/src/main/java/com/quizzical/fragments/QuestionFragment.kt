@@ -2,6 +2,7 @@ package com.quizzical.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import butterknife.ButterKnife
 import com.quizzical.R
 import com.quizzical.enums.FragmentTypes
 import com.quizzical.models.FragmentData
+import com.quizzical.models.Question
 import com.quizzical.viewmodels.FragmentVm
 import com.quizzical.viewmodels.QuestionsVm
 
@@ -35,7 +37,7 @@ class QuestionFragment : Fragment() {
     private lateinit var questionsVm: QuestionsVm
     private lateinit var fragmentVm: FragmentVm
 
-    private var currentIndex = 0
+    private lateinit var question: Question
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,8 +67,9 @@ class QuestionFragment : Fragment() {
     }
 
     private fun loadQuestion(questionIndex: Int) {
-        questionsVm.triviaQuestions.value?.get(questionIndex)?.let { question ->
+        questionsVm.triviaQuestions.value?.get(questionIndex)?.let {
             title.text = String.format(getString(R.string.question_number), questionIndex + 1)
+            question = it
             question.let {
                 questionTv.text = question.question
                 val correctAnswer = question.correct_answer
@@ -97,17 +100,23 @@ class QuestionFragment : Fragment() {
                 if (option == correctAnswer) {
                     optionTextView.setTextColor(Color.WHITE)
                     row.setBackgroundColor(Color.GREEN)
+                    val bundle = Bundle()
+                    bundle.putInt(
+                        "current_question_index",
+                        questionIndex + 1
+                    )
+                    Handler().postDelayed({
+                        fragmentVm.currentFragment.value =
+                            FragmentData(FragmentTypes.QuestionFragment, bundle, false)
+                    }, 1000)
                 } else {
                     optionTextView.setTextColor(Color.WHITE)
                     row.setBackgroundColor(Color.RED)
+                    Handler().postDelayed({
+                        fragmentVm.currentFragment.value =
+                            FragmentData(FragmentTypes.LoseFragment)
+                    }, 1000)
                 }
-                val bundle = Bundle()
-                bundle.putInt(
-                    "current_question_index",
-                    questionIndex + 1
-                )
-                fragmentVm.currentFragment.value =
-                    FragmentData(FragmentTypes.QuestionFragment, bundle)
             }
             multipleChoiceOptions.addView(row)
         }
