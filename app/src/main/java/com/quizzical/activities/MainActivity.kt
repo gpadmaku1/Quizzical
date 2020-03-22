@@ -41,7 +41,7 @@ class MainActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
 
         ButterKnife.bind(this)
-        initializeMenuFragment()
+        initDifficultyFragment()
         setupFragmentVm()
     }
 
@@ -54,6 +54,12 @@ class MainActivity : FragmentActivity() {
                 fragmentData.addToBackStack
             )
         })
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            finish()
+        }
     }
 
     private fun replaceCurrentFragment(
@@ -80,7 +86,7 @@ class MainActivity : FragmentActivity() {
                                 arguments = packageData
                             } else {
                                 fragmentVm.currentFragment.value =
-                                    FragmentData(FragmentTypes.WinFragment)
+                                    FragmentData(FragmentTypes.WinFragment, Bundle.EMPTY, true)
                             }
                         }
                     }
@@ -109,10 +115,10 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    private fun initializeMenuFragment() {
+    private fun initDifficultyFragment() {
         val fragment = DifficultyFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
+            .add(R.id.fragment_container, fragment)
             .commit()
     }
 }

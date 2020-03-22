@@ -5,14 +5,44 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/better_luck_tv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="LOSER"
-        android:textSize="@dimen/text_32"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_32"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:fontFamily="@font/raleway"
+        android:gravity="center"
+        android:text="@string/better_luck_next_time_text"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/better_luck_lottie_av"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_32"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/better_luck_tv"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/better_luck" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_32"
+        android:fontFamily="@font/raleway"
+        android:gravity="center"
+        android:text="@string/session_score"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/better_luck_lottie_av" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

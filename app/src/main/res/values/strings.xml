@@ -4,6 +4,8 @@
     <string name="select_difficulty">Select Difficulty</string>
     <string name="question_number">Question %1$d</string>
     <string name="sample_question_text">What ingredient is NOT used to craft a cake in Minecraft?</string>
-
+    <string name="loading_text">Loading…</string>
+    <string name="better_luck_next_time_text">Sorry! Better luck next time.</string>
     <string name="current_question_key">current_question_key</string>
+    <string name="session_score">Your Score:\n %d</string>
 </resources>

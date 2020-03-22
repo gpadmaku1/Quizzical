@@ -7,8 +7,10 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
@@ -31,6 +33,12 @@ class QuestionFragment : Fragment() {
 
     @BindView(R.id.multiple_choice_options)
     lateinit var multipleChoiceOptions: LinearLayout
+
+    @BindView(R.id.lottie_checkmark_view)
+    lateinit var checkMarkView: FrameLayout
+
+    @BindView(R.id.lottie_cross_view)
+    lateinit var crossView: FrameLayout
 
     private lateinit var questionsVm: QuestionsVm
     private lateinit var fragmentVm: FragmentVm
@@ -101,34 +109,74 @@ class QuestionFragment : Fragment() {
         correctAnswer: String,
         questionIndex: Int
     ) {
+        val rows = ArrayList<View>()
         options.forEach { option ->
             val row = layoutInflater.inflate(
                 R.layout.option_item,
                 multipleChoiceOptions,
                 false
             )
+            rows.add(row)
             val optionTextView = row.findViewById<TextView>(R.id.option_text)
             optionTextView.text = option
             row.setOnClickListener {
                 if (option == correctAnswer) {
                     optionTextView.setTextColor(Color.WHITE)
-                    row.setBackgroundColor(Color.GREEN)
+                    context?.let {
+                        row.setBackgroundColor(ContextCompat.getColor(it, R.color.green_correct))
+                    }
                     val bundle = Bundle()
                     bundle.putInt(
                         "current_question_index",
                         questionIndex + 1
                     )
                     Handler().postDelayed({
+                        checkMarkView.visibility = View.VISIBLE
+                    }, 500)
+                    Handler().postDelayed({
+                        checkMarkView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
-                            FragmentData(FragmentTypes.QuestionFragment, bundle, false)
-                    }, 1000)
+                            FragmentData(FragmentTypes.QuestionFragment, bundle, true)
+                    }, 3000)
                 } else {
                     optionTextView.setTextColor(Color.WHITE)
-                    row.setBackgroundColor(Color.RED)
+                    context?.let { context ->
+                        row.setBackgroundColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.red_incorrect
+                            )
+                        )
+                        rows.forEach { view ->
+                            val optionTextView = view.findViewById<TextView>(R.id.option_text)
+                            if (optionTextView.text != correctAnswer) {
+                                view.setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.red_incorrect
+                                    )
+                                )
+                                optionTextView.setTextColor(Color.WHITE)
+                            } else {
+                                view.setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.green_correct
+                                    )
+                                )
+                                optionTextView.setTextColor(Color.WHITE)
+                            }
+                        }
+                    }
+
                     Handler().postDelayed({
+                        crossView.visibility = View.VISIBLE
+                    }, 500)
+                    Handler().postDelayed({
+                        crossView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
-                            FragmentData(FragmentTypes.LoseFragment)
-                    }, 1000)
+                            FragmentData(FragmentTypes.LoseFragment, Bundle.EMPTY, true)
+                    }, 3000)
                 }
             }
             multipleChoiceOptions.addView(row)

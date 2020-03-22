@@ -5,6 +5,6 @@ import com.quizzical.enums.FragmentTypes
 
 class FragmentData(
     val fragmentTypes: FragmentTypes,
-    val bundle: Bundle = Bundle(),
-    val addToBackStack: Boolean = true
+    val bundle: Bundle,
+    val addToBackStack: Boolean = false
 )
