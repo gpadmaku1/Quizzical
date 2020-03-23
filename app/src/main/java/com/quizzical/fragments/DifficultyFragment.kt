@@ -78,7 +78,7 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
             if (it.isNotEmpty()) {
                 lottieView.visibility = View.GONE
                 fragmentVm.currentFragment.value =
-                    FragmentData(FragmentTypes.QuestionFragment, Bundle.EMPTY, true)
+                    FragmentData(FragmentTypes.QuestionFragment, Bundle.EMPTY)
             } else {
                 lottieView.visibility = View.GONE
                 Toast.makeText(

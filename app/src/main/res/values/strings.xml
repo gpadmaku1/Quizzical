@@ -8,4 +8,6 @@
     <string name="better_luck_next_time_text">Sorry! Better luck next time.</string>
     <string name="current_question_key">current_question_key</string>
     <string name="session_score">Your Score:\n %d</string>
+    <string name="play_again">Play Again</string>
+    <string name="congrats_you_re_a_winner">Congrats! You\'re a winner.</string>
 </resources>

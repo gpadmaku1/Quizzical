@@ -136,7 +136,7 @@ class QuestionFragment : Fragment() {
                     Handler().postDelayed({
                         checkMarkView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
-                            FragmentData(FragmentTypes.QuestionFragment, bundle, true)
+                            FragmentData(FragmentTypes.QuestionFragment, bundle)
                     }, 3000)
                 } else {
                     optionTextView.setTextColor(Color.WHITE)
@@ -173,9 +173,11 @@ class QuestionFragment : Fragment() {
                         crossView.visibility = View.VISIBLE
                     }, 500)
                     Handler().postDelayed({
+                        val bundle = Bundle()
+                        bundle.putInt("current_score", questionIndex)
                         crossView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
-                            FragmentData(FragmentTypes.LoseFragment, Bundle.EMPTY, true)
+                            FragmentData(FragmentTypes.LoseFragment, bundle)
                     }, 3000)
                 }
             }

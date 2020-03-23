@@ -86,7 +86,7 @@ class MainActivity : FragmentActivity() {
                                 arguments = packageData
                             } else {
                                 fragmentVm.currentFragment.value =
-                                    FragmentData(FragmentTypes.WinFragment, Bundle.EMPTY, true)
+                                    FragmentData(FragmentTypes.WinFragment, Bundle.EMPTY)
                             }
                         }
                     }
@@ -99,7 +99,9 @@ class MainActivity : FragmentActivity() {
                 }
             }
             FragmentTypes.LoseFragment -> {
-                LoseFragment()
+                LoseFragment().apply {
+                    arguments = bundle
+                }
             }
             FragmentTypes.WinFragment -> {
                 WinFragment()
