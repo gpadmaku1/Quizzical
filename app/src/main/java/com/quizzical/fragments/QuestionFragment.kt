@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.quizzical.R
+import com.quizzical.activities.MainActivity.Companion.QUESTION_INDEX_BUNDLE_KEY
 import com.quizzical.enums.FragmentTypes
 import com.quizzical.models.FragmentData
 import com.quizzical.models.Question
@@ -54,7 +55,7 @@ class QuestionFragment : Fragment() {
         ButterKnife.bind(this, view)
         setupQuestionVm()
         setupFragmentVm()
-        arguments?.getInt("current_question_index")?.let {
+        arguments?.getInt(QUESTION_INDEX_BUNDLE_KEY)?.let {
             loadQuestion(it)
         }
         return view
@@ -127,7 +128,7 @@ class QuestionFragment : Fragment() {
                     }
                     val bundle = Bundle()
                     bundle.putInt(
-                        "current_question_index",
+                        QUESTION_INDEX_BUNDLE_KEY,
                         questionIndex + 1
                     )
                     Handler().postDelayed({
@@ -148,15 +149,15 @@ class QuestionFragment : Fragment() {
                             )
                         )
                         rows.forEach { view ->
-                            val optionTextView = view.findViewById<TextView>(R.id.option_text)
-                            if (optionTextView.text != correctAnswer) {
+                            val rowOptionTextView = view.findViewById<TextView>(R.id.option_text)
+                            if (rowOptionTextView.text != correctAnswer) {
                                 view.setBackgroundColor(
                                     ContextCompat.getColor(
                                         context,
                                         R.color.red_incorrect
                                     )
                                 )
-                                optionTextView.setTextColor(Color.WHITE)
+                                rowOptionTextView.setTextColor(Color.WHITE)
                             } else {
                                 view.setBackgroundColor(
                                     ContextCompat.getColor(
@@ -164,7 +165,7 @@ class QuestionFragment : Fragment() {
                                         R.color.green_correct
                                     )
                                 )
-                                optionTextView.setTextColor(Color.WHITE)
+                                rowOptionTextView.setTextColor(Color.WHITE)
                             }
                         }
                     }

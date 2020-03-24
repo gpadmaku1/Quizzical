@@ -15,7 +15,6 @@ import com.quizzical.fragments.LoseFragment
 import com.quizzical.fragments.QuestionFragment
 import com.quizzical.fragments.WinFragment
 import com.quizzical.models.FragmentData
-import com.quizzical.models.Question
 import com.quizzical.viewmodels.FragmentVm
 import com.quizzical.viewmodels.QuestionsVm
 
@@ -23,6 +22,9 @@ class MainActivity : FragmentActivity() {
 
     companion object {
         val TAG: String = MainActivity::class.java.simpleName
+        const val QUESTION_INDEX_BUNDLE_KEY = "current_question_index"
+        const val PREFS_NAME = "QuizzicalSharedPreferencesFile"
+        const val HIGH_SCORE_SP_KEY = "quizzical_high_score"
     }
 
     @BindView(R.id.fragment_container)
@@ -33,8 +35,6 @@ class MainActivity : FragmentActivity() {
 
     private val fragmentVm: FragmentVm by lazy { FragmentVm.get(this) }
     private val questionsVm: QuestionsVm by lazy { QuestionsVm.get(this) }
-
-    private lateinit var questions: List<Question>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,33 +69,8 @@ class MainActivity : FragmentActivity() {
     ) {
         val fragment = when (fragmentType) {
             FragmentTypes.DifficultyFragment -> {
-                DifficultyFragment()
-            }
-            FragmentTypes.QuestionFragment -> {
-                if (!bundle.isEmpty) {
-                    val currentQuestionIndex =
-                        bundle.getInt("current_question_index")
-                    QuestionFragment().apply {
-                        questionsVm.triviaQuestions.value?.size?.let {
-                            if (currentQuestionIndex < it) {
-                                val packageData = Bundle()
-                                packageData.putInt(
-                                    "current_question_index",
-                                    currentQuestionIndex
-                                )
-                                arguments = packageData
-                            } else {
-                                fragmentVm.currentFragment.value =
-                                    FragmentData(FragmentTypes.WinFragment, Bundle.EMPTY)
-                            }
-                        }
-                    }
-                } else {
-                    QuestionFragment().apply {
-                        val packageData = Bundle()
-                        packageData.putInt("current_question_index", 0)
-                        arguments = packageData
-                    }
+                DifficultyFragment().apply {
+                    arguments = bundle
                 }
             }
             FragmentTypes.LoseFragment -> {
@@ -104,7 +79,38 @@ class MainActivity : FragmentActivity() {
                 }
             }
             FragmentTypes.WinFragment -> {
-                WinFragment()
+                WinFragment().apply {
+                    arguments = bundle
+                }
+            }
+            FragmentTypes.QuestionFragment -> {
+                if (!bundle.isEmpty) {
+                    QuestionFragment().apply {
+                        val currentQuestionIndex =
+                            bundle.getInt(QUESTION_INDEX_BUNDLE_KEY)
+                        questionsVm.triviaQuestions.value?.size?.let {
+                            if (currentQuestionIndex < it) {
+                                val packageData = Bundle()
+                                packageData.putInt(
+                                    QUESTION_INDEX_BUNDLE_KEY,
+                                    currentQuestionIndex
+                                )
+                                arguments = packageData
+                            } else {
+                                val highScoreBundle = Bundle()
+                                highScoreBundle.putInt("current_score", it)
+                                fragmentVm.currentFragment.value =
+                                    FragmentData(FragmentTypes.WinFragment, highScoreBundle)
+                            }
+                        }
+                    }
+                } else {
+                    QuestionFragment().apply {
+                        val packageData = Bundle()
+                        packageData.putInt(QUESTION_INDEX_BUNDLE_KEY, 0)
+                        arguments = packageData
+                    }
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 package com.quizzical.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.quizzical.R
+import com.quizzical.activities.MainActivity
 import com.quizzical.enums.FragmentTypes
 import com.quizzical.models.FragmentData
 import com.quizzical.viewmodels.FragmentVm
@@ -39,7 +41,16 @@ class LoseFragment : Fragment() {
     }
 
     private fun setupHighScoreText() {
+        val sharedPref =
+            activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) ?: return
+        val currentHighScore = sharedPref.getInt(MainActivity.HIGH_SCORE_SP_KEY, 0)
         arguments?.getInt("current_score")?.let {
+            if (it > currentHighScore) {
+                with(sharedPref.edit()) {
+                    putInt(MainActivity.HIGH_SCORE_SP_KEY, it)
+                    commit()
+                }
+            }
             userScore.text = String.format(getString(R.string.session_score), it)
         }
     }

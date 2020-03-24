@@ -10,4 +10,6 @@
     <string name="session_score">Your Score:\n %d</string>
     <string name="play_again">Play Again</string>
     <string name="congrats_you_re_a_winner">Congrats! You\'re a winner.</string>
+    <string name="high_score">High Score: %d</string>
+    <string name="no_internet_check_your_connection">No Internet. \nCheck your connection.</string>
 </resources>
