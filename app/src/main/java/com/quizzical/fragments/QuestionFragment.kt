@@ -1,9 +1,11 @@
 package com.quizzical.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,14 +128,10 @@ class QuestionFragment : Fragment() {
                     context?.let {
                         row.setBackgroundColor(ContextCompat.getColor(it, R.color.green_correct))
                     }
-                    val bundle = Bundle()
-                    bundle.putInt(
-                        QUESTION_INDEX_BUNDLE_KEY,
-                        questionIndex + 1
-                    )
-                    Handler().postDelayed({
-                        checkMarkView.visibility = View.VISIBLE
-                    }, 500)
+                    val bundle = Bundle().apply {
+                        putInt(QUESTION_INDEX_BUNDLE_KEY, questionIndex + 1)
+                    }
+                    Handler().postDelayed({ checkMarkView.visibility = View.VISIBLE }, 500)
                     Handler().postDelayed({
                         checkMarkView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
@@ -148,34 +146,14 @@ class QuestionFragment : Fragment() {
                                 R.color.red_incorrect
                             )
                         )
-                        rows.forEach { view ->
-                            val rowOptionTextView = view.findViewById<TextView>(R.id.option_text)
-                            if (rowOptionTextView.text != correctAnswer) {
-                                view.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.red_incorrect
-                                    )
-                                )
-                                rowOptionTextView.setTextColor(Color.WHITE)
-                            } else {
-                                view.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.green_correct
-                                    )
-                                )
-                                rowOptionTextView.setTextColor(Color.WHITE)
-                            }
-                        }
+                        updateRowColors(rows, correctAnswer, context)
                     }
 
+                    Handler().postDelayed({ crossView.visibility = View.VISIBLE }, 500)
                     Handler().postDelayed({
-                        crossView.visibility = View.VISIBLE
-                    }, 500)
-                    Handler().postDelayed({
-                        val bundle = Bundle()
-                        bundle.putInt("current_score", questionIndex)
+                        val bundle = Bundle().apply {
+                            putInt("current_score", questionIndex)
+                        }
                         crossView.visibility = View.GONE
                         fragmentVm.currentFragment.value =
                             FragmentData(FragmentTypes.LoseFragment, bundle)
@@ -183,6 +161,33 @@ class QuestionFragment : Fragment() {
                 }
             }
             multipleChoiceOptions.addView(row)
+        }
+    }
+
+    private fun updateRowColors(
+        rows: ArrayList<View>,
+        correctAnswer: String,
+        context: Context
+    ) {
+        rows.forEach { view ->
+            val rowOptionTextView = view.findViewById<TextView>(R.id.option_text)
+            if (rowOptionTextView.text != correctAnswer) {
+                view.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.red_incorrect
+                    )
+                )
+                rowOptionTextView.setTextColor(Color.WHITE)
+            } else {
+                view.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.green_correct
+                    )
+                )
+                rowOptionTextView.setTextColor(Color.WHITE)
+            }
         }
     }
 }
