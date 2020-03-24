@@ -86,7 +86,7 @@ class MainActivity : FragmentActivity() {
             FragmentTypes.QuestionFragment -> {
                 if (!bundle.isEmpty) {
                     QuestionFragment().apply {
-                        val currentQuestionIndex =
+                    val currentQuestionIndex =
                             bundle.getInt(QUESTION_INDEX_BUNDLE_KEY)
                         questionsVm.triviaQuestions.value?.size?.let {
                             if (currentQuestionIndex < it) {
