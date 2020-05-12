@@ -48,8 +48,8 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
     lateinit var highScore: TextView
 
     private lateinit var questionsVm: QuestionsVm
-
     private lateinit var fragmentVm: FragmentVm
+
     private lateinit var difficultyAdapter: DifficultyAdapter
 
     override fun onCreateView(
@@ -72,11 +72,9 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
         }
     }
 
-    private fun setupDifficultyRv() {
-        difficultyAdapter = DifficultyAdapter(this)
-        difficultyRecyclerView.apply {
-            adapter = difficultyAdapter
-            layoutManager = LinearLayoutManager(context)
+    private fun setupFragmentVm() {
+        activity?.let {
+            fragmentVm = ViewModelProviders.of(it).get(FragmentVm::class.java)
         }
     }
 
@@ -92,9 +90,11 @@ class DifficultyFragment : Fragment(), OnDifficultyClickListener {
 
     }
 
-    private fun setupFragmentVm() {
-        activity?.let {
-            fragmentVm = ViewModelProviders.of(it).get(FragmentVm::class.java)
+    private fun setupDifficultyRv() {
+        difficultyAdapter = DifficultyAdapter(this)
+        difficultyRecyclerView.apply {
+            adapter = difficultyAdapter
+            layoutManager = LinearLayoutManager(context)
         }
     }
 

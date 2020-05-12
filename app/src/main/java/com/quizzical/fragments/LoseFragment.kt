@@ -40,18 +40,24 @@ class LoseFragment : Fragment() {
         return view
     }
 
+    private fun setupFragmentVm() {
+        activity?.let {
+            fragmentVm = ViewModelProviders.of(it).get(FragmentVm::class.java)
+        }
+    }
+
     private fun setupHighScoreText() {
         val sharedPref =
             activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) ?: return
         val currentHighScore = sharedPref.getInt(MainActivity.HIGH_SCORE_SP_KEY, 0)
         arguments?.getInt("current_score")?.let {
-            if (it > currentHighScore) {
+            if (it * 10 > currentHighScore) {
                 with(sharedPref.edit()) {
-                    putInt(MainActivity.HIGH_SCORE_SP_KEY, it)
+                    putInt(MainActivity.HIGH_SCORE_SP_KEY, it * 10)
                     commit()
                 }
             }
-            userScore.text = String.format(getString(R.string.session_score), it)
+            userScore.text = String.format(getString(R.string.session_score), it * 10)
         }
     }
 
@@ -62,9 +68,4 @@ class LoseFragment : Fragment() {
         }
     }
 
-    private fun setupFragmentVm() {
-        activity?.let {
-            fragmentVm = ViewModelProviders.of(it).get(FragmentVm::class.java)
-        }
-    }
 }

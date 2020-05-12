@@ -41,7 +41,7 @@ class WinFragment : Fragment() {
             activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) ?: return
         arguments?.getInt("current_score")?.let {
             with(sharedPref.edit()) {
-                putInt(MainActivity.HIGH_SCORE_SP_KEY, it)
+                putInt(MainActivity.HIGH_SCORE_SP_KEY, it * 10)
                 commit()
             }
         }

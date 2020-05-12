@@ -106,11 +106,8 @@ class QuestionFragment : Fragment() {
         return String(data)
     }
 
-    private fun createOptionsList(
-        options: ArrayList<String>,
-        correctAnswer: String,
-        questionIndex: Int
-    ) {
+    private fun createOptionsList(options: ArrayList<String>, correctAnswer: String,
+        questionIndex: Int) {
         val rows = ArrayList<View>()
         options.forEach { option ->
             val row = layoutInflater.inflate(
@@ -122,11 +119,13 @@ class QuestionFragment : Fragment() {
             val optionTextView = row.findViewById<TextView>(R.id.option_text)
             optionTextView.text = option
             row.setOnClickListener {
+                //If the tapped row is correct answer, take the user to the next question
                 if (option == correctAnswer) {
                     optionTextView.setTextColor(Color.WHITE)
                     context?.let {
                         row.setBackgroundColor(ContextCompat.getColor(it, R.color.green_correct))
                     }
+                    //Increment question index by 1 to load the next question
                     val bundle = Bundle().apply {
                         putInt(QUESTION_INDEX_BUNDLE_KEY, questionIndex + 1)
                     }
@@ -145,7 +144,7 @@ class QuestionFragment : Fragment() {
                                 R.color.red_incorrect
                             )
                         )
-                        updateRowColors(rows, correctAnswer, context)
+                        updateRowColors(rows, correctAnswer, context, option)
                     }
 
                     Handler().postDelayed({ crossView.visibility = View.VISIBLE }, 500)
@@ -163,29 +162,30 @@ class QuestionFragment : Fragment() {
         }
     }
 
+    /**
+     * This method is called if wrong answer is submitted
+     * The correct answer is displayed in Green and wrong answer in Red
+     */
     private fun updateRowColors(
         rows: ArrayList<View>,
         correctAnswer: String,
-        context: Context
+        context: Context,
+        option: String
     ) {
         rows.forEach { view ->
             val rowOptionTextView = view.findViewById<TextView>(R.id.option_text)
-            if (rowOptionTextView.text != correctAnswer) {
-                view.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.red_incorrect
-                    )
-                )
-                rowOptionTextView.setTextColor(Color.WHITE)
-            } else {
-                view.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.green_correct
-                    )
-                )
-                rowOptionTextView.setTextColor(Color.WHITE)
+            when (rowOptionTextView.text) {
+                correctAnswer -> {
+                    rowOptionTextView.setTextColor(Color.WHITE)
+                    ContextCompat.getColor(context, R.color.green_correct)
+                }
+                option -> {
+                    rowOptionTextView.setTextColor(Color.WHITE)
+                    ContextCompat.getColor(context, R.color.red_incorrect)
+                }
+                else -> { Color.WHITE }
+            }.apply {
+                view.setBackgroundColor(this)
             }
         }
     }

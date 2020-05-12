@@ -34,7 +34,6 @@ class NetworkUtils {
             } catch (e: SocketTimeoutException) {
                 Log.e(TAG, "Request timed out.")
                 e.printStackTrace()
-                getRequest(url)
             }
             return null
         }

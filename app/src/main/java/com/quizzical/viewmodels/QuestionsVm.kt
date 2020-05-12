@@ -18,7 +18,7 @@ class QuestionsVm : ViewModel() {
     companion object {
         val TAG: String = QuestionsVm::class.java.simpleName
         var questionsUrl =
-            "https://opentdb.com/api.php?amount=25&type=multiple&encode=base64&difficulty="
+            "https://opentdb.com/api.php?amount=10&type=multiple&encode=base64&difficulty="
 
         fun get(activity: MainActivity) =
             ViewModelProviders.of(activity).get(QuestionsVm::class.java)

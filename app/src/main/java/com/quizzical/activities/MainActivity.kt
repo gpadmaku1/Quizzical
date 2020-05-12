@@ -47,7 +47,6 @@ class MainActivity : FragmentActivity() {
 
     private fun setupFragmentVm() {
         fragmentVm.currentFragment.observe(this, Observer { fragmentData ->
-            Log.d(TAG, fragmentData.fragmentTypes.name)
             replaceCurrentFragment(
                 fragmentData.fragmentTypes,
                 fragmentData.bundle,
@@ -62,11 +61,8 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    private fun replaceCurrentFragment(
-        fragmentType: FragmentTypes,
-        bundle: Bundle,
-        addToBackStack: Boolean
-    ) {
+    private fun replaceCurrentFragment(fragmentType: FragmentTypes, bundle: Bundle,
+        addToBackStack: Boolean) {
         val fragment = when (fragmentType) {
             FragmentTypes.DifficultyFragment -> {
                 DifficultyFragment().apply {
@@ -86,15 +82,11 @@ class MainActivity : FragmentActivity() {
             FragmentTypes.QuestionFragment -> {
                 if (!bundle.isEmpty) {
                     QuestionFragment().apply {
-                    val currentQuestionIndex =
-                            bundle.getInt(QUESTION_INDEX_BUNDLE_KEY)
+                    val currentQuestionIndex = bundle.getInt(QUESTION_INDEX_BUNDLE_KEY)
                         questionsVm.triviaQuestions.value?.size?.let {
                             if (currentQuestionIndex < it) {
                                 val packageData = Bundle()
-                                packageData.putInt(
-                                    QUESTION_INDEX_BUNDLE_KEY,
-                                    currentQuestionIndex
-                                )
+                                packageData.putInt(QUESTION_INDEX_BUNDLE_KEY, currentQuestionIndex)
                                 arguments = packageData
                             } else {
                                 val highScoreBundle = Bundle()
@@ -125,8 +117,6 @@ class MainActivity : FragmentActivity() {
 
     private fun initDifficultyFragment() {
         val fragment = DifficultyFragment()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
-            .commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
     }
 }
